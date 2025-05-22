@@ -885,39 +885,43 @@
 <!-- mixitup cdn js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js"></script>
 
-<script src="script.js"></script>
+<script src="s<script src="script.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
 <script type="text/javascript">
-    emailjs.init('8m6I0HVpsurdHPKJS')
+    emailjs.init('8m6I0HVpsurdHPKJS');
 </script>
 <script>
-    const btn = document.getElementById('button');
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('contactForm');
+        const btn = form.querySelector('button[type="submit"]');
 
-    document.getElementById('form')
-        .addEventListener('submit', function(event) {
+        form.addEventListener('submit', function(event) {
             event.preventDefault();
 
             btn.disabled = true; // Disable the button
+            const originalBtnText = btn.innerHTML;
+            btn.innerHTML = 'Sending... <i class="bx bx-send"></i>';
 
             setTimeout(() => {
                 btn.disabled = false; // Re-enable the button after 7 seconds
             }, 7000);
-
-            btn.value = 'Sending...';
 
             const serviceID = 'service_default';
             const templateID = 'template_1cai5ca';
 
             emailjs.sendForm(serviceID, templateID, this)
                 .then(() => {
-                    btn.value = 'Send Email';
-                    alert('Send Email Successfully!!')
+                    btn.innerHTML = originalBtnText;
+                    alert('Email sent successfully!');
+                    form.reset(); // Optional: reset the form after successful submission
                 }, (err) => {
-                    btn.value = 'Send Email';
-                    alert(JSON.stringify(err));
+                    btn.innerHTML = originalBtnText;
+                    btn.disabled = false;
+                    alert('Failed to send email: ' + JSON.stringify(err));
                 });
         });
+    });
 </script>
 </body>
 </html>
