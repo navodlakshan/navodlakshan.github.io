@@ -766,7 +766,55 @@
 
 
 <!--=========================Contact Section=========================-->
+<section class="contact" id="contact">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="heading">Contact Me</h2>
+            <span class="subheading">Get in touch with me</span>
+        </div>
 
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-card">
+                    <i class='bx bx-envelope'></i>
+                    <h3>Email</h3>
+                    <p>navodlakshanperera@gmail.com</p>
+                </div>
+
+                <div class="contact-card">
+                    <i class='bx bx-phone'></i>
+                    <h3>Phone</h3>
+                    <p>+94 758 189 134</p>
+                </div>
+
+                <div class="contact-card">
+                    <i class='bx bx-map'></i>
+                    <h3>Location</h3>
+                    <p>Colombo, Sri Lanka</p>
+                </div>
+            </div>
+
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <input type="text" name="from_name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" name="reply_to" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="subject" placeholder="Subject" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea name="message" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit" class="btn" id="submitBtn">Send Message <i class='bx bx-send'></i></button>
+                    <div class="form-message"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!--=========================Footer Section=========================-->
 
@@ -837,6 +885,60 @@
 <!-- mixitup cdn js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mixitup/3.3.1/mixitup.min.js"></script>
 
+<script src="script.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+<script>
+    // Initialize EmailJS
+    emailjs.init('8m6I0HVpsurdHPKJS');
+
+    // Contact form submission
+    document.getElementById('contactForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const submitBtn = document.getElementById('submitBtn');
+        const originalBtnText = submitBtn.innerHTML;
+
+        // Update button state
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Sending... <i class="bx bx-loader bx-spin"></i>';
+
+        const serviceID = 'default_service';
+        const templateID = 'template_1cai5ca';
+
+        emailjs.sendForm(serviceID, templateID, this)
+            .then(() => {
+                // Success message
+                const messageDiv = document.querySelector('.form-message');
+                messageDiv.textContent = 'Message sent successfully!';
+                messageDiv.classList.add('success');
+                messageDiv.style.display = 'block';
+
+                // Reset form and button
+                document.getElementById('contactForm').reset();
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            })
+            .catch((err) => {
+                // Error message
+                const messageDiv = document.querySelector('.form-message');
+                messageDiv.textContent = 'Failed to send message. Please try again.';
+                messageDiv.classList.add('error');
+                messageDiv.style.display = 'block';
+
+                // Reset button
+                submitBtn.innerHTML = originalBtnText;
+                submitBtn.disabled = false;
+
+                console.error('EmailJS Error:', err);
+            });
+    });
+</script>
 
 </body>
 </html>
