@@ -795,22 +795,33 @@
             </div>
 
             <div class="contact-form">
-                <form id="contactForm">
-                    <div class="form-group">
-                        <input type="text" name="name" placeholder="Your Name" required>
+                <form id="form">
+                    <div class="field">
+                        <label for="from_name">from_name</label>
+                        <input type="text" name="from_name" id="from_name">
                     </div>
-                    <div class="form-group">
-                        <input type="email" name="email" placeholder="Your Email" required>
+                    <div class="field">
+                        <label for="name">name</label>
+                        <input type="text" name="name" id="name">
                     </div>
-                    <div class="form-group">
-                        <input type="text" name="subject" placeholder="Subject" required>
+                    <div class="field">
+                        <label for="reply_to">reply_to</label>
+                        <input type="text" name="reply_to" id="reply_to">
                     </div>
-                    <div class="form-group">
-                        <textarea name="message" placeholder="Your Message" required></textarea>
+                    <div class="field">
+                        <label for="message">message</label>
+                        <input type="text" name="message" id="message">
                     </div>
-                    <button type="submit" class="btn">Send Message <i class='bx bx-send'></i></button>
-                    <div class="form-message"></div>
+
+                    <input type="submit" id="button" value="Send Email" >
                 </form>
+
+                <script type="text/javascript"
+                        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+                <script type="text/javascript">
+                    emailjs.init('8m6I0HVpsurdHPKJS')
+                </script>
             </div>
         </div>
     </div>
@@ -892,36 +903,26 @@
     emailjs.init('8m6I0HVpsurdHPKJS');
 </script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const form = document.getElementById('contactForm');
-        const btn = form.querySelector('button[type="submit"]');
+    const btn = document.getElementById('button');
 
-        form.addEventListener('submit', function(event) {
+    document.getElementById('form')
+        .addEventListener('submit', function(event) {
             event.preventDefault();
 
-            btn.disabled = true; // Disable the button
-            const originalBtnText = btn.innerHTML;
-            btn.innerHTML = 'Sending... <i class="bx bx-send"></i>';
+            btn.value = 'Sending...';
 
-            setTimeout(() => {
-                btn.disabled = false; // Re-enable the button after 7 seconds
-            }, 7000);
-
-            const serviceID = 'service_default';
+            const serviceID = 'default_service';
             const templateID = 'template_1cai5ca';
 
             emailjs.sendForm(serviceID, templateID, this)
                 .then(() => {
-                    btn.innerHTML = originalBtnText;
-                    alert('Email sent successfully!');
-                    form.reset(); // Optional: reset the form after successful submission
+                    btn.value = 'Send Email';
+                    alert('Sent!');
                 }, (err) => {
-                    btn.innerHTML = originalBtnText;
-                    btn.disabled = false;
-                    alert('Failed to send email: ' + JSON.stringify(err));
+                    btn.value = 'Send Email';
+                    alert(JSON.stringify(err));
                 });
         });
-    });
 </script>
 </body>
 </html>
